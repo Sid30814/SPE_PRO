@@ -17,7 +17,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Pulls code from your GitHub repository
-                git branch: 'main', url: 'https://github.com/your-repo/SPE_PRO.git'
+                git branch: 'main', url: 'https://github.com/Sid30814/SPE_PRO.git'
             }
         }
 
