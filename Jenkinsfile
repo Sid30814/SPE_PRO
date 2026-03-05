@@ -28,22 +28,21 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
-            steps {
-                // Build the image from your Dockerfile
-                sh "docker build -t ${SiddheshMahajan}/${scientific_calculator}:latest ."
-            }
-        }
+     stage('Docker Build') {
+                 steps {
+                     // Use the variable names defined in the environment block
+                     sh "docker build -t ${SiddheshMahajan}/${scientific_calculator}:latest ."
+                 }
+             }
 
-        stage('Push to Docker Hub') {
-            steps {
-                // Login and push using Jenkins credentials
-                withDockerRegistry([url: 'https://index.docker.io/v1/', credentialsId: "${DockerHubCred}"]) {
-                    sh "docker push ${SiddheshMahajan}/${scientific_calculator}:latest"
-                }
-            }
-        }
-
+             stage('Push to Docker Hub') {
+                 steps {
+                     // Use the variable for the Credentials ID as well
+                     withDockerRegistry([url: 'https://index.docker.io/v1/', credentialsId: "${DockerHubCred}"]) {
+                         sh "docker push ${SiddheshMahajan}/${scientific_calculator}:latest"
+                     }
+                 }
+             }
         stage('Pull & Deploy with Ansible') {
             steps {
                 // Configuration Management: Use Ansible to pull and run the container
