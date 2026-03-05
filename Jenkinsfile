@@ -31,15 +31,15 @@ pipeline {
      stage('Docker Build') {
                  steps {
                      // Use the variable names defined in the environment block
-                     sh "docker build -t ${SiddheshMahajan}/${scientific_calculator}:latest ."
+                     sh "docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest ."
                  }
              }
 
              stage('Push to Docker Hub') {
                  steps {
                      // Use the variable for the Credentials ID as well
-                     withDockerRegistry([url: 'https://index.docker.io/v1/', credentialsId: "${DockerHubCred}"]) {
-                         sh "docker push ${SiddheshMahajan}/${scientific_calculator}:latest"
+                     withDockerRegistry([url: 'https://index.docker.io/v1/', credentialsId: "${DOCKER_HUB_CREDS}"]) {
+                         sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
                      }
                  }
              }
