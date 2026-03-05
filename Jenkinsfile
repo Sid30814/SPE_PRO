@@ -8,8 +8,8 @@ pipeline {
 
     environment {
         // Replace with your actual Docker Hub username and credentials ID
-        DOCKER_HUB_USER = 'your_username'
-        IMAGE_NAME = 'scientific-calculator'
+        DOCKER_HUB_USER = 'SiddheshMahajan'
+        IMAGE_NAME = 'scientific_calculator'
         DOCKER_HUB_CREDS = 'DockerHubCred'
     }
 
