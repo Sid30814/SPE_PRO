@@ -1,16 +1,11 @@
-# Use an OpenJDK runtime as the base image
-FROM openjdk:11-jre-slim
+# Use Eclipse Temurin (the official successor to the old OpenJDK image)
+FROM eclipse-temurin:11-jre-alpine
 
 # Set the working directory inside the container to /app
 WORKDIR /app
 
-# Copy the JAR file from your target folder to the container
-# This matches the name 'ScientificCalculator-1.0-SNAPSHOT.jar' seen in your image
+# Copy the JAR file from your target folder
 COPY target/ScientificCalculator-1.0-SNAPSHOT.jar /app/scientific-calculator.jar
 
-# Copy the source tests directory for reference (as per your requested style)
-COPY src/test/java /app/tests/
-
-# Command to run the scientific calculator
-# We use ENTRYPOINT so the app starts automatically
+# Command to run the calculator
 ENTRYPOINT ["java", "-jar", "/app/scientific-calculator.jar"]
