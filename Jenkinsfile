@@ -58,6 +58,18 @@ pipeline {
                 sh 'ansible-playbook -i ansible/inventory ansible/playbook.yml'
             }
         }
+        post {
+                success {
+                    mail to: 'siddheshmahajan814@gmail.com',
+                         subject: "SUCCESS: Pipeline Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                         body: "Great news! The pipeline completed successfully. Check the build here: ${env.BUILD_URL}"
+                }
+                failure {
+                    mail to: 'siddheshmahajan814@gmail.com',
+                         subject: "FAILURE: Pipeline Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                         body: "Oh no! The pipeline failed. Check the logs here: ${env.BUILD_URL}"
+                }
+            }
     }
 
 

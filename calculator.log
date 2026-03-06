@@ -2,3 +2,13 @@ Mar 05, 2026 9:59:20 PM org.example.ScientificCalculator main
 INFO: Application started.
 Mar 05, 2026 9:59:36 PM org.example.ScientificCalculator main
 INFO: Square Root of 4.0 = 2.0
+Mar 06, 2026 12:38:25 PM org.example.ScientificCalculator main
+INFO: Application started.
+Mar 06, 2026 12:38:42 PM org.example.ScientificCalculator main
+WARNING: Log error: Non-positive input 0.0
+Mar 06, 2026 12:38:58 PM org.example.ScientificCalculator main
+INFO: Natural Log of 8.0 = 2.0794415416798357
+Mar 06, 2026 12:43:26 PM org.example.ScientificCalculator main
+INFO: Application started.
+Mar 06, 2026 12:43:37 PM org.example.ScientificCalculator main
+INFO: Power: 4.0^2.0 = 16.0
