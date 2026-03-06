@@ -21,4 +21,4 @@
         interactive: yes
         tty: yes
         detach: yes
-        restart_policy: unless_stopped
+        restart_policy: unless-stopped
