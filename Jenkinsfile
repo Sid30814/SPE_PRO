@@ -55,16 +55,9 @@ pipeline {
 //                    }
                     sh 'ansible-playbook -i ansible/inventory.ini ansible/playbook_pull.yml'
                }
-        }
+        }}
 
-        stage('Ansible Post-Configuration') {
-            steps {
-                // Final setup or health check via Ansible
-
-            }
-        }
-        
-    }// Add this post block at the end of your pipeline
+      // Add this post block at the end of your pipeline
     post {
         success {
             mail to: 'mamtamahajan37@gmail.com',
