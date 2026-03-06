@@ -1,7 +1,13 @@
 ---
 - name: Deploy Scientific Calculator Microservice
   hosts: local_host
+  become: yes
+
   tasks:
+    - name: Login to Docker Hub
+      shell: "echo {{ docker_password }} | docker login -u {{ docker_user }} --password-stdin"
+      changed_when: false
+
     - name: Pull latest image from Docker Hub
       docker_image:
         name: "siddheshmahajan/scientific_calculator"
@@ -18,7 +24,6 @@
         name: calculator_service
         image: "siddheshmahajan/scientific_calculator:latest"
         state: started
-        interactive: yes
-        tty: yes
-        detach: yes
-        restart_policy: unless_stopped
+        restart_policy: unless-stopped
+        ports:
+          - "8081:8080" # Maps Host port 8081 to Container port 8080
