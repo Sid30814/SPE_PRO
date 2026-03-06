@@ -35,16 +35,15 @@ pipeline {
                  }
              }
 
-            stage('Push to Docker Hub') {
-                steps {
-                    // Ensure DOCKER_HUB_CREDENTIALS is 'DockerHubCred' in your environment block
-                    script {
-                        docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
-                            sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
-                        }
-                    }
-                }
-            }
+          stage('Push to Docker Hub') {
+              steps {
+                  // withDockerRegistry is a declarative step that handles the login
+                  // without needing a 'script' wrapper.
+                  withDockerRegistry([url: 'https://index.docker.io/v1/', credentialsId: "${DOCKER_HUB_CREDENTIALS}"]) {
+                      sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+                  }
+              }
+          }
         stage('Pull & Deploy with Ansible') {
             steps {
                 // Configuration Management: Use Ansible to pull and run the container
