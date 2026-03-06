@@ -60,6 +60,18 @@ pipeline {
             }
         }
         
+    }// Add this post block at the end of your pipeline
+    post {
+        success {
+            mail to: 'your-email@example.com',
+                 subject: "Success: Pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "Build successful! View details: ${env.BUILD_URL}"
+        }
+        failure {
+            mail to: 'your-email@example.com',
+                 subject: "Failure: Pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "Build failed! Please check the logs here: ${env.BUILD_URL}"
+        }
     }
 
 
