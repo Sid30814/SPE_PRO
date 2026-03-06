@@ -38,29 +38,29 @@ pipeline {
 
           stage('Push to Docker Hub') {
               steps {
-                  // withDockerRegistry is a declarative step that handles the login
-                  // without needing a 'script' wrapper.
-                  withDockerRegistry([url: 'https://index.docker.io/v1/', credentialsId: "${DOCKER_HUB_CREDENTIALS}"]) {
-                      sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
-                  }
+                     withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                                      sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+                                      sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+                     }
               }
           }
         stage('Pull & Deploy with Ansible') {
            steps {
-                   // Use the 'withCredentials' block to securely pass Docker Hub credentials to Ansible
-                   withCredentials([usernamePassword(credentialsId: 'DockerHubCred',
-                                                    usernameVariable: 'DOCKER_USER',
-                                                    passwordVariable: 'DOCKER_PASS')]) {
-
-                       sh "ansible-playbook -i ansible/inventory ansible/playbook_pull.yml --extra-vars 'docker_user=${DOCKER_USER} docker_password=${DOCKER_PASS}'"
-                   }
+//                    // Use the 'withCredentials' block to securely pass Docker Hub credentials to Ansible
+//                    withCredentials([usernamePassword(credentialsId: 'DockerHubCred',
+//                                                     usernameVariable: 'DOCKER_USER',
+//                                                     passwordVariable: 'DOCKER_PASS')]) {
+//
+//                        sh "ansible-playbook -i ansible/inventory ansible/playbook_pull.yml --extra-vars 'docker_user=${DOCKER_USER} docker_password=${DOCKER_PASS}'"
+//                    }
+                    sh 'ansible-playbook -i ansible/inventory.ini ansible/playbook_pull.yml'
                }
         }
 
         stage('Ansible Post-Configuration') {
             steps {
                 // Final setup or health check via Ansible
-                sh 'ansible-playbook -i ansible/inventory ansible/playbook_pull.yml'
+
             }
         }
         

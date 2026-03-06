@@ -1,32 +1,22 @@
 ---
-- name: Deploy Scientific Calculator Container
+- name: Deploy Scientific Calculator Microservice
   hosts: local_host
-  become: yes
-
-  # These variables are populated by the --extra-vars passed from Jenkins
-  vars:
-    docker_user: "{{ docker_user }}"
-    docker_password: "{{ docker_password }}"
-    image_name: "scientific_calculator"
-
   tasks:
-    - name: Login to Docker Hub
-      shell: "echo {{ docker_password }} | docker login -u {{ docker_user }} --password-stdin"
-
-    - name: Pull the latest Docker image
+    - name: Pull latest image from Docker Hub
       docker_image:
-        name: "{{ docker_user }}/{{ image_name }}:latest"
+        name: "siddheshmahajan/scientific_calculator"
+        tag: latest
         source: pull
 
-    - name: Ensure existing container is stopped and removed
+    - name: Stop and remove old container if it exists
       docker_container:
-        name: "{{ image_name }}"
+        name: calculator_service
         state: absent
 
-    - name: Run the new container
+    - name: Run the new Calculator container
       docker_container:
-        name: "{{ image_name }}"
-        image: "{{ docker_user }}/{{ image_name }}:latest"
+        name: calculator_service
+        image: "siddheshmahajan/scientific_calculator:latest"
         state: started
         interactive: yes
         tty: yes
