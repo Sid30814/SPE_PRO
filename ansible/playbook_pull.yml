@@ -28,6 +28,6 @@
         name: "{{ image_name }}"
         image: "{{ docker_user }}/{{ image_name }}:latest"
         state: started
+        interactive: yes
+        tty: yes
         restart_policy: always
-        ports:
-          - "8080:8080"
