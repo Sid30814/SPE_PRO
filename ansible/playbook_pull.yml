@@ -1,6 +1,6 @@
 ---
 - name: Deploy Scientific Calculator Container
-  hosts: all
+  hosts: local_host
   become: yes
 
   # These variables are populated by the --extra-vars passed from Jenkins
