@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     // Triggers for SCM Polling - checks for changes every minute
-    triggers {
-        pollSCM('* * * * *')
-    }
+    // triggers {
+    //     pollSCM('* * * * *')
+    // }
 
     environment {
         // Replace with your actual Docker Hub username and credentials ID
