@@ -46,11 +46,18 @@ pipeline {
               }
           }
         stage('Pull & Deploy with Ansible') {
-            steps {
-                // Configuration Management: Use Ansible to pull and run the container
-                // This replaces the Kubernetes logic
-                sh 'ansible-playbook -i ansible/inventory ansible/playbook_pull.yml'
-            }
+           steps {
+                   // Use the 'withCredentials' block to securely pass Docker Hub credentials to Ansible
+                   withCredentials([usernamePassword(credentialsId: 'DockerHubCred',
+                                                    usernameVariable: 'DOCKER_USER',
+                                                    passwordVariable: 'DOCKER_PASS')]) {
+
+                       sh """
+                          ansible-playbook -i ansible/inventory ansible/playbook_pull.yml \
+                          --extra-vars "docker_user=${DOCKER_USER} docker_password=${DOCKER_PASS}"
+                       """
+                   }
+               }
         }
 
         stage('Ansible Post-Configuration') {
