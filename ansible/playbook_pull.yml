@@ -1,23 +1,32 @@
 ---
-- name: Deploy Docker Container
+- name: Deploy Scientific Calculator Container
   hosts: all
   become: yes
+
+  # These variables are populated by the --extra-vars passed from Jenkins
+  vars:
+    docker_user: "{{ docker_user }}"
+    docker_password: "{{ docker_password }}"
+    image_name: "scientific_calculator"
+
   tasks:
     - name: Login to Docker Hub
-      shell: docker login -u "{{ docker_user }}" -p "{{ docker_password }}"
+      shell: "echo {{ docker_password }} | docker login -u {{ docker_user }} --password-stdin"
 
-    - name: Pull latest image
+    - name: Pull the latest Docker image
       docker_image:
-        name: "{{ docker_user }}/scientific_calculator:latest"
+        name: "{{ docker_user }}/{{ image_name }}:latest"
         source: pull
 
-    - name: Stop and remove existing container
-      shell: docker rm -f scientific_calculator || true
-
-    - name: Run new container
+    - name: Ensure existing container is stopped and removed
       docker_container:
-        name: scientific_calculator
-        image: "{{ docker_user }}/scientific_calculator:latest"
+        name: "{{ image_name }}"
+        state: absent
+
+    - name: Run the new container
+      docker_container:
+        name: "{{ image_name }}"
+        image: "{{ docker_user }}/{{ image_name }}:latest"
         state: started
         restart_policy: always
         ports:
