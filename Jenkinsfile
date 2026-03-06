@@ -4,6 +4,7 @@ pipeline {
     // Triggers for SCM Polling - checks for changes every minute
     // triggers {
     //     pollSCM('* * * * *')
+    
     // }
 
     environment {
