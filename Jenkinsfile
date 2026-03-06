@@ -52,10 +52,7 @@ pipeline {
                                                     usernameVariable: 'DOCKER_USER',
                                                     passwordVariable: 'DOCKER_PASS')]) {
 
-                       sh """
-                          ansible-playbook -i ansible/inventory ansible/playbook_pull.yml \
-                          --extra-vars "docker_user=${DOCKER_USER} docker_password=${DOCKER_PASS}"
-                       """
+                       sh "ansible-playbook -i ansible/inventory ansible/playbook_pull.yml --extra-vars 'docker_user=${DOCKER_USER} docker_password=${DOCKER_PASS}'"
                    }
                }
         }
