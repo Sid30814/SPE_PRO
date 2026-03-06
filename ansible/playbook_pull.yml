@@ -20,4 +20,5 @@
         state: started
         interactive: yes
         tty: yes
-        restart_policy: always
+        detach: yes
+        restart_policy: unless_stopped
