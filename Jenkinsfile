@@ -10,7 +10,7 @@ pipeline {
         // Replace with your actual Docker Hub username and credentials ID
         DOCKER_HUB_USER = 'siddheshmahajan'
         IMAGE_NAME = 'scientific_calculator'
-        DOCKER_HUB_CREDS = 'DockerHubCred'
+        DOCKER_HUB_CREDENTIALS = 'DockerHubCred'
     }
 
     stages {
@@ -37,9 +37,9 @@ pipeline {
 
             stage('Push to Docker Hub') {
                 steps {
-                    // Ensure DOCKER_HUB_CREDS is 'DockerHubCred' in your environment block
+                    // Ensure DOCKER_HUB_CREDENTIALS is 'DockerHubCred' in your environment block
                     script {
-                        docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDS}") {
+                        docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
                             sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
                         }
                     }
