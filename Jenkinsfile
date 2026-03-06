@@ -63,7 +63,7 @@ pipeline {
         stage('Ansible Post-Configuration') {
             steps {
                 // Final setup or health check via Ansible
-                sh 'ansible-playbook -i ansible/inventory ansible/playbook.yml'
+                sh 'ansible-playbook -i ansible/inventory ansible/playbook_pull.yml'
             }
         }
         
