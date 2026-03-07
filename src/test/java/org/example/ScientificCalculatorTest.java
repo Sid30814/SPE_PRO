@@ -1,21 +1,25 @@
 package org.example;
 
-import java.util.Scanner;
-
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.example.ScientificCalculator;
 public class ScientificCalculatorTest {
 
-    public static void main(String[] args) {
-        // Your existing menu logic calling the methods below
+    // Your logic methods - Note: Make them static to be accessible
+
+    // --- JUnit Test Methods ---
+
+    @Test
+    public void testSqrt() {
+        assertEquals(4.0, Math.sqrt(16.0), 0.001);
     }
 
-    // This is the method the test is looking for
-    public static double sqrt(double x) {
-        return Math.sqrt(x);
+    @Test
+    public void testFactorial() {
+        assertEquals(120, ScientificCalculator.calculateFactorial(5));
     }
-
-    public static long factorial(int n) {
-        long res = 1;
-        for (int i = 2; i <= n; i++) res *= i;
-        return res;
+    @Test
+    public void testLogarithm() {
+        assertEquals(0.0, Math.log(1.0), 0.001);
     }
 }
