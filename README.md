@@ -1,79 +1,172 @@
 # Scientific Calculator CI/CD Project
 
-This project demonstrates a fully automated **CI/CD pipeline** for a Java-based Scientific Calculator. It covers the entire development lifecycle, including automated testing, containerization, and automated deployment.
+This project demonstrates a fully automated **CI/CD pipeline** for a Java-based Scientific Calculator using **Jenkins, Docker, and Ansible**.  
+The pipeline automatically builds, tests, containerizes, and deploys the application whenever the pipeline is triggered.
 
 ---
 
-## Project Overview
+# Project Overview
 
-This project applies **DevOps best practices** to automate the process from source code to a running application. Every commit triggers an automated pipeline that ensures code quality, builds a containerized application, and deploys it without manual intervention.
+The goal of this project is to implement **DevOps automation** for a Java application.  
+The CI/CD pipeline performs the following tasks automatically:
+
+- Fetches source code from GitHub
+- Builds and tests the application using Maven
+- Creates a Docker image
+- Pushes the image to Docker Hub
+- Deploys the application using Ansible
+- Sends a notification based on pipeline status
 
 ---
 
-## Tools Used
+# Tools Used
 
 - **Version Control:** Git & GitHub  
 - **Automation Server:** Jenkins  
+- **Build Tool:** Maven  
 - **Containerization:** Docker & Docker Hub  
 - **Configuration Management:** Ansible  
-- **Quality Assurance:** JUnit (via Maven)  
-- **Connectivity:** ngrok  
+- **Testing:** JUnit  
 
 ---
 
-## Architecture
+# CI/CD Pipeline Stages
 
-The CI/CD workflow follows these steps:
+The Jenkins pipeline consists of the following stages:
 
-1. **Code Repository**  
-   The source code is maintained in a GitHub repository. Any changes pushed to the repository trigger the Jenkins pipeline.
+## 1. Checkout
 
-2. **Build & Test**  
-   Maven compiles the source code and executes JUnit tests to ensure the application's correctness.
+The pipeline retrieves the latest source code from the GitHub repository.
 
-3. **Containerization**  
-   The application is packaged into a Docker image using a Dockerfile and pushed to Docker Hub.
-
-4. **Deployment**  
-   An Ansible playbook pulls the Docker image and deploys the container on the local machine.
-
----
-
-## Prerequisites
-
-Before running this project, ensure the following tools are installed:
-
-- Java 11  
-- Maven 3.x  
-- Docker & Docker Hub Account  
-- Ansible  
-- Jenkins  
-
----
-
-## Getting Started
-
-Follow these steps to replicate the project:
-
-1. **Clone the repository**
-
+```groovy
+stage('Checkout') {
+    steps {
+        git branch: 'main', url: 'https://github.com/Sid30814/SPE_PRO.git'
+    }
+}
 ```
+
+---
+
+## 2. Build & Test
+
+The project is compiled and tested using Maven.  
+JUnit tests are executed during this stage.
+
+```groovy
+stage('Build & Test') {
+    steps {
+        sh 'mvn clean package'
+    }
+}
+```
+
+---
+
+## 3. Docker Build
+
+A Docker image is created using the Dockerfile in the project.
+
+```groovy
+stage('Docker Build') {
+    steps {
+        sh "docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest ."
+    }
+}
+```
+
+---
+
+## 4. Push to Docker Hub
+
+The generated Docker image is pushed to Docker Hub using stored Jenkins credentials.
+
+```groovy
+stage('Push to Docker Hub') {
+    steps {
+        withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}",
+        passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+
+            sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+            sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+        }
+    }
+}
+```
+
+---
+
+## 5. Pull & Deploy with Ansible
+
+The Ansible playbook pulls the latest Docker image and deploys the container.
+
+```groovy
+stage('Pull & Deploy with Ansible') {
+    steps {
+        sh 'ansible-playbook -i ansible/inventory.ini ansible/playbook_pull.yml'
+    }
+}
+```
+
+---
+
+## 6. Pipeline Notification
+
+After the pipeline execution completes, Jenkins checks whether the build was successful or failed and triggers a notification.
+
+```groovy
+post {
+    success {
+        // Triggered when pipeline execution succeeds
+    }
+    failure {
+        // Triggered when pipeline execution fails
+    }
+}
+```
+
+---
+
+# Prerequisites
+
+Before running the project, ensure the following tools are installed:
+
+- Java 11
+- Maven 3.x
+- Docker
+- Docker Hub Account
+- Jenkins
+- Ansible
+
+---
+
+# Running the Project
+
+Clone the repository:
+
+```bash
 git clone https://github.com/Sid30814/SPE_PRO.git
 ```
 
-2. **Build the project**
+Navigate to the project directory:
+
+```bash
+cd SPE_PRO
+```
+
+Build the project:
 
 ```bash
 mvn clean package
 ```
 
-3. **Build the Docker image**
+Build the Docker image:
 
 ```bash
-docker build -t <dockerhub-username>/scientific_calculator:latest .
+docker build -t siddheshmahajan/scientific_calculator:latest .
 ```
 
-4. **Deploy the application using Ansible**
+Deploy using Ansible:
 
 ```bash
 ansible-playbook -i ansible/inventory.ini ansible/playbook_pull.yml
@@ -81,16 +174,8 @@ ansible-playbook -i ansible/inventory.ini ansible/playbook_pull.yml
 
 ---
 
-## Testing
+# Author
 
-Unit tests are integrated into the build process. To run the tests manually:
+**Siddhesh Mahajan**
 
-```bash
-mvn test
-```
-
-
-
-
-  
-Roll Number: **MT2025122**
+GitHub: https://github.com/Sid30814
