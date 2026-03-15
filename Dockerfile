@@ -1,4 +1,4 @@
-# Use Eclipse Temurin (the official successor to the old OpenJDK image
+# Use Eclipse Temurin (the official successor to the old OpenJDK image)
 FROM eclipse-temurin:11-jre-alpine
 
 # Set the working directory inside the container to /app
